@@ -13,12 +13,15 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 public class ChatController {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
+    private Map<String, String> players = new HashMap<>();
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
@@ -27,13 +30,15 @@ public class ChatController {
         logger.info("inputMessage = " + inputMessage);
         logger.info("headerAccessor = " + headerAccessor);
 
-        OutputMessage outputMessage = new OutputMessage(MessageType.CHAT);
-        outputMessage.setSender(inputMessage.getSender());
-        outputMessage.setContent(inputMessage.getContent());
+        if (players.containsValue(inputMessage.getSender())) {
+            OutputMessage outputMessage = new OutputMessage(MessageType.CHAT);
+            outputMessage.setSender(inputMessage.getSender());
+            outputMessage.setContent(inputMessage.getContent());
 
-        Thread.sleep(1000);
-
-        return outputMessage;
+            return outputMessage;
+        } else {
+            throw new RuntimeException("BOMBA, UN GIOCATORE IN PIÙ!");
+        }
     }
 
     @MessageMapping("/chat.addUser")
@@ -42,6 +47,12 @@ public class ChatController {
         logger.info("#########   addUser   #########");
         logger.info("inputMessage = " + inputMessage);
         logger.info("headerAccessor = " + headerAccessor);
+
+        if (players.containsKey(inputMessage.getLocation())) {
+            throw new RuntimeException("POSTO  OCCUPATO!");
+        } else {
+            players.put(inputMessage.getLocation(), inputMessage.getSender());
+        }
 
         // Add username in web socket session
         Map<String, Object> sessionAttributes = headerAccessor.getSessionAttributes();
