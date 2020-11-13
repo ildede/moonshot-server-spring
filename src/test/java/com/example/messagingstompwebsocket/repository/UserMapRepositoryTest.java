@@ -40,9 +40,9 @@ class UserMapRepositoryTest {
 
     @ParameterizedTest
     @MethodSource
-    void IT_CAN_COUNT_ELEMENTS(Map<String, String> map, int count) {
+    void IT_CAN_COUNT_ELEMENTS(Map<String, String> map, int expectedCount) {
         UserMapRepository repository = new UserMapRepository(map);
-        assertEquals(count, repository.count());
+        assertEquals(expectedCount, repository.count());
     }
     private static Stream<Arguments> IT_CAN_COUNT_ELEMENTS() {
         return Stream.of(
@@ -57,7 +57,7 @@ class UserMapRepositoryTest {
         UserMapRepository repository = new UserMapRepository();
         repository.add("any");
 
-        assertEquals(repository.count(), 1);
+        assertEquals(1, repository.count());
     }
 
     @Test
@@ -65,6 +65,6 @@ class UserMapRepositoryTest {
         UserMapRepository repository = new UserMapRepository(new HashMap<>(Map.of("any", "any")));
         repository.remove("any");
 
-        assertEquals(repository.count(), 0);
+        assertEquals(0, repository.count());
     }
 }

@@ -31,8 +31,8 @@ public class GameController {
     @MessageMapping("/game.create")
     @SendTo("/games/list")
     public OutputMessage createGame(@Payload InputMessage inputMessage, @Header("simpSessionId") String sessionId) {
-        logger.info("inputMessage = " + inputMessage);
-        logger.info("sessionId = " + sessionId);
+        logger.info("sessionId: {}", sessionId);
+        logger.info("inputMessage: {}", inputMessage);
 
         Game game = new Game(UUID.randomUUID().toString());
         if (inputMessage.getLocation().equals("EARTH")) {
@@ -53,8 +53,8 @@ public class GameController {
     @MessageMapping("/game.join")
     @SendTo("/games/list")
     public OutputMessage joinGame(@Payload InputMessage inputMessage, @Header("simpSessionId") String sessionId) {
-        logger.info("inputMessage = " + inputMessage);
-        logger.info("sessionId = " + sessionId);
+        logger.info("sessionId: {}", sessionId);
+        logger.info("inputMessage: {}", inputMessage);
 
         gameRepository.read(inputMessage.getContent())
                 .ifPresent(game -> {

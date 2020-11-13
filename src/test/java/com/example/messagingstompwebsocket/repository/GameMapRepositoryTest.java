@@ -45,7 +45,7 @@ class GameMapRepositoryTest {
         GameMapRepository repository = new GameMapRepository();
         repository.write(new Game("any"));
 
-        assertEquals(repository.count(), 1);
+        assertEquals(1, repository.count());
     }
 
     @Test
@@ -53,24 +53,24 @@ class GameMapRepositoryTest {
         GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any", new Game("any"))));
         repository.remove("any");
 
-        assertEquals(repository.count(), 0);
+        assertEquals(0, repository.count());
     }
 
     @Test
     void RETRIEVE_ALL_ELEMENTS() {
         GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", new Game("any1"), "any2", new Game("any2"))));
-        assertEquals(repository.readAll(), Set.of(new Game("any1"), new Game("any2")));
+        assertEquals(Set.of(new Game("any1"), new Game("any2")), repository.readAll());
     }
 
     @Test
     void RETRIEVE_SINGLE_ELEMENT() {
         GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", new Game("any1"), "any2", new Game("any2"))));
-        assertEquals(repository.read("any1"), Optional.of(new Game("any1")));
+        assertEquals(Optional.of(new Game("any1")), repository.read("any1"));
     }
 
     @Test
     void RETRIEVE_MISSING_ELEMENT() {
         GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", new Game("any1"), "any2", new Game("any2"))));
-        assertEquals(repository.read("any3"), Optional.empty());
+        assertEquals(Optional.empty(), repository.read("any3"));
     }
 }

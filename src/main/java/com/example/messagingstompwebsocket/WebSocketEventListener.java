@@ -21,13 +21,13 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        logger.info("Received a new web socket connection: " + event.toString());
+        logger.info("Received a new web socket connection: {}", event.toString());
         userRepository.add(String.valueOf(event.getMessage().getHeaders().get("simpSessionId")));
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        logger.info("Received a new web socket disconnection: " + event.toString());
+        logger.info("Received a new web socket disconnection: {}", event.toString());
         userRepository.remove(String.valueOf(event.getMessage().getHeaders().get("simpSessionId")));
     }
 }
