@@ -1,11 +1,10 @@
 package com.example.messagingstompwebsocket.repository;
 
-import com.example.messagingstompwebsocket.Game;
+import com.example.messagingstompwebsocket.entity.Game;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

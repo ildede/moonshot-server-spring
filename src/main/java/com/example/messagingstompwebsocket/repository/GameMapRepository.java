@@ -1,10 +1,9 @@
 package com.example.messagingstompwebsocket.repository;
 
-import com.example.messagingstompwebsocket.Game;
+import com.example.messagingstompwebsocket.entity.Game;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class GameMapRepository {

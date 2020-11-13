@@ -1,5 +1,6 @@
 package com.example.messagingstompwebsocket;
 
+import com.example.messagingstompwebsocket.entity.Game;
 import com.example.messagingstompwebsocket.message.InputMessage;
 import com.example.messagingstompwebsocket.message.MessageType;
 import com.example.messagingstompwebsocket.message.OutputMessage;
@@ -18,12 +19,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @Controller
-public class ChatController {
+public class GameController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private final GameMapRepository gameRepository;
 
-    public ChatController(GameMapRepository gameRepository) {
+    public GameController(GameMapRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
