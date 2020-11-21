@@ -1,7 +1,6 @@
 package com.example.messagingstompwebsocket;
 
 import com.example.messagingstompwebsocket.entity.Game;
-import com.example.messagingstompwebsocket.message.InputMessage;
 import com.example.messagingstompwebsocket.message.MessageType;
 import com.example.messagingstompwebsocket.message.NewGame;
 import com.example.messagingstompwebsocket.message.OutputMessage;
@@ -10,10 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -110,7 +104,7 @@ public class GameController {
 
     @PostMapping(path = "/games/join", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> joinGame(@RequestBody JoinGame body) {
-        logger.info("/games/create, body: {}", body);
+        logger.info("/games/join, body: {}", body);
 
         gameRepository.read(body.getGame())
                 .ifPresent(game -> {

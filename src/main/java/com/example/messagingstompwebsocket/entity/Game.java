@@ -1,18 +1,25 @@
 package com.example.messagingstompwebsocket.entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Game {
     private final String id;
+    private final LocalDateTime creationTime;
     private String userOnEarth;
     private String userOnMoon;
 
     public Game(String gameId) {
         this.id = gameId;
+        this.creationTime = LocalDateTime.now();
     }
 
     public String getId() {
         return id;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 
     public String getUserOnEarth() {
