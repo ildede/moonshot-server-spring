@@ -45,4 +45,13 @@ public class Game {
     public int hashCode() {
         return Objects.hash(id, userOnEarth, userOnMoon);
     }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id='" + id + '\'' +
+                ", userOnEarth='" + userOnEarth + '\'' +
+                ", userOnMoon='" + userOnMoon + '\'' +
+                '}';
+    }
 }
