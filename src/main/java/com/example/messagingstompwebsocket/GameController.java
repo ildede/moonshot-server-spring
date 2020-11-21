@@ -1,9 +1,7 @@
 package com.example.messagingstompwebsocket;
 
 import com.example.messagingstompwebsocket.entity.Game;
-import com.example.messagingstompwebsocket.message.MessageType;
-import com.example.messagingstompwebsocket.message.NewGame;
-import com.example.messagingstompwebsocket.message.OutputMessage;
+import com.example.messagingstompwebsocket.message.*;
 import com.example.messagingstompwebsocket.repository.GameMapRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,48 @@ public class GameController {
         this.gameRepository = gameRepository;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
+//
+//    @MessageMapping("/game.create")
+//    @SendTo("/games/list")
+//    public OutputMessage createGame(@Payload InputMessage inputMessage, @Header("simpSessionId") String sessionId) {
+//        logger.info("/game.create, sessionId: {}, inputMessage: {}", sessionId, inputMessage);
+//
+//        Game game = new Game(UUID.randomUUID().toString());
+//        if (inputMessage.getLocation().equals("EARTH")) {
+//            game.setUserOnEarth(sessionId);
+//        } else if (inputMessage.getLocation().equals("MOON")) {
+//            game.setUserOnMoon(sessionId);
+//        }
+//
+//        String gameId = gameRepository.write(game);
+//        OutputMessage outputMessage = new OutputMessage(MessageType.NEW_GAME);
+//        outputMessage.setSender(sessionId);
+//        outputMessage.setContent(gameId);
+//        outputMessage.setLocation(inputMessage.getLocation());
+//
+//        return outputMessage;
+//    }
+
+//    @MessageMapping("/game.join")
+//    @SendTo("/games/list")
+//    public OutputMessage joinGame(@Payload InputMessage inputMessage, @Header("simpSessionId") String sessionId) {
+//        logger.info("/game.join, sessionId: {}, inputMessage: {}", sessionId, inputMessage);
+//
+//        gameRepository.read(inputMessage.getContent())
+//                .ifPresent(game -> {
+//                    if (game.getUserOnEarth() != null) {
+//                        game.setUserOnEarth(sessionId);
+//                    } else if (game.getUserOnMoon() != null) {
+//                        game.setUserOnMoon(sessionId);
+//                    }
+//                    gameRepository.write(game);
+//                });
+//
+//        OutputMessage outputMessage = new OutputMessage(MessageType.REMOVE_GAME);
+//        outputMessage.setSender(sessionId);
+//        outputMessage.setContent(inputMessage.getContent());
+//        return outputMessage;
+//    }
 
     @GetMapping("/games/list")
     public ResponseEntity<Set<Game>> getAllGames() {
@@ -82,5 +122,14 @@ public class GameController {
         simpMessagingTemplate.convertAndSend("/games/list", outputMessage);
 
         return ResponseEntity.ok(gameRepository.read(body.getGame()).orElse(new Game("empty")));
+    }
+
+    @PostMapping(path = "/games/message", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> joinGame(@RequestBody ChatMessage body) {
+        logger.info("/games/message, body: {}", body);
+
+        simpMessagingTemplate.convertAndSend("/games/list/"+body.getGame(), body);
+
+        return ResponseEntity.ok("OK");
     }
 }
