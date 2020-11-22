@@ -121,11 +121,17 @@ public class GameController {
         outputMessage.setContent(body.getGame());
         simpMessagingTemplate.convertAndSend("/games/list", outputMessage);
 
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setGame(body.getGame());
+        chatMessage.setLocation(body.getLocation());
+        chatMessage.setMessage(body.getUsername() + " joined");
+        simpMessagingTemplate.convertAndSend("/games/list/"+body.getGame(), chatMessage);
+
         return ResponseEntity.ok(gameRepository.read(body.getGame()).orElse(new Game("empty")));
     }
 
     @PostMapping(path = "/games/message", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> joinGame(@RequestBody ChatMessage body) {
+    public ResponseEntity<String> postMessage(@RequestBody ChatMessage body) {
         logger.info("/games/message, body: {}", body);
 
         simpMessagingTemplate.convertAndSend("/games/list/"+body.getGame(), body);
