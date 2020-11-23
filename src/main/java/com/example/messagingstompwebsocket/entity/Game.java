@@ -3,8 +3,6 @@ package com.example.messagingstompwebsocket.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Game {
     private final String id;
@@ -17,19 +15,9 @@ public class Game {
     public Game(String gameId) {
         this.id = gameId;
         this.creationTime = LocalDateTime.now();
-        this.moonPieces = Set.of(
-                new Piece("red", "circle"),
-                new Piece("blue", "square"),
-                new Piece("green", "triangle")
-        );
-        this.earthPieces = Stream.concat(
-                moonPieces.stream(),
-                Set.of(
-                        new Piece("green", "circle"),
-                        new Piece("red", "square"),
-                        new Piece("blue", "triangle")
-                ).stream())
-                .collect(Collectors.toSet());
+        PieceBuilder builder = new PieceBuilder();
+        this.moonPieces = builder.forMoon();
+        this.earthPieces = builder.forEarth();
     }
 
     public String getId() {

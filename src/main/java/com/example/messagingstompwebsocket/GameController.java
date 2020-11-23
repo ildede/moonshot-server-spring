@@ -72,19 +72,19 @@ public class GameController {
 //        return outputMessage;
 //    }
 
-    @GetMapping("/games/list")
+    @GetMapping(value = "/games/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<Game>> getAllGames() {
         return ResponseEntity.ok(gameRepository.readAll());
     }
 
-    @GetMapping("/games/{gameId}")
+    @GetMapping(value = "/games/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> getGame(@PathVariable String gameId) {
         return gameRepository.read(gameId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/games/create")
+    @PostMapping(value = "/games/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> createGame(@RequestBody NewGame body) {
         logger.info("/games/create, body: {}", body);
 
@@ -107,7 +107,7 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
-    @PostMapping(path = "/games/join", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/games/join", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> joinGame(@RequestBody JoinGame body) {
         logger.info("/games/join, body: {}", body);
 
@@ -137,7 +137,7 @@ public class GameController {
         return ResponseEntity.ok(gameRepository.read(body.getGame()).orElse(new Game("empty")));
     }
 
-    @PostMapping(path = "/games/message", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/games/message", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postMessage(@RequestBody ChatMessage body) {
         logger.info("/games/message, body: {}", body);
 
