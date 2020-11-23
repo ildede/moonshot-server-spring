@@ -1,7 +1,10 @@
 package com.example.messagingstompwebsocket;
 
 import com.example.messagingstompwebsocket.entity.Game;
-import com.example.messagingstompwebsocket.message.*;
+import com.example.messagingstompwebsocket.message.ChatMessage;
+import com.example.messagingstompwebsocket.message.MessageType;
+import com.example.messagingstompwebsocket.message.NewGame;
+import com.example.messagingstompwebsocket.message.OutputMessage;
 import com.example.messagingstompwebsocket.repository.GameMapRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -75,6 +75,13 @@ public class GameController {
     @GetMapping("/games/list")
     public ResponseEntity<Set<Game>> getAllGames() {
         return ResponseEntity.ok(gameRepository.readAll());
+    }
+
+    @GetMapping("/games/{gameId}")
+    public ResponseEntity<Game> getGame(@PathVariable String gameId) {
+        return gameRepository.read(gameId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/games/create")
