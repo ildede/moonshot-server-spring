@@ -1,6 +1,7 @@
 package com.example.messagingstompwebsocket;
 
 import com.example.messagingstompwebsocket.entity.Game;
+import com.example.messagingstompwebsocket.entity.Piece;
 import com.example.messagingstompwebsocket.message.ChatMessage;
 import com.example.messagingstompwebsocket.message.MessageType;
 import com.example.messagingstompwebsocket.message.NewGame;
@@ -14,8 +15,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
@@ -82,6 +85,35 @@ public class GameController {
         return gameRepository.read(gameId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping(value = "/games/{gameId}/check", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getGame(@PathVariable String gameId, @RequestBody Set<Piece> selected) {
+
+        Set<Piece> right = gameRepository.read(gameId)
+                .map(g -> {
+                    if (g.getMoonPieces().containsAll(selected)
+                        && selected.containsAll(g.getMoonPieces())) {
+                        return g.getMoonPieces();
+                    } else {
+                        return g.getMoonPieces().stream()
+                                .filter(selected::contains)
+                                .collect(Collectors.toSet());
+                    }
+                }).orElse(new HashSet<>());
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setLocation("EARTH");
+        chatMessage.setGame(gameId);
+        if (right.size() == 3) {
+            chatMessage.setMessage("You Win!");
+        } else {
+            chatMessage.setMessage(right.size() + " right. Try Again.");
+        }
+
+        simpMessagingTemplate.convertAndSend("/games/list/"+gameId, chatMessage);
+
+        return ResponseEntity.ok(right.size() + " right.");
     }
 
     @PostMapping(value = "/games/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
