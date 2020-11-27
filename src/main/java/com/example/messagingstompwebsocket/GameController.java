@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "https://moonshot-client.netlify.app")
+@CrossOrigin(origins = "${client.url}")
 @Controller
 public class GameController {
 
