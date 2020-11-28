@@ -16,7 +16,7 @@ public class PieceBuilder {
         Set<Piece> forEarth = new HashSet<>();
         for (String part : parts) {
             for (int i = 0; i < numberOfElements; i++) {
-                Piece piece = new Piece(part, rand.nextInt(19));
+                Piece piece = new Piece(part, rand.nextInt(18));
                 forEarth.add(piece);
                 if (i == 0) {
                     forMoon.add(piece);
