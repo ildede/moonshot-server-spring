@@ -63,7 +63,7 @@ public class GameController {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setLocation("EARTH");
         chatMessage.setGame(gameId);
-        if (right.size() == 3) {
+        if (right.size() == 5) {
             chatMessage.setMessage("You Win!");
         } else {
             chatMessage.setMessage(right.size() + " right. Try Again.");

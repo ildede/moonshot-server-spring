@@ -3,20 +3,20 @@ package com.example.messagingstompwebsocket.entity;
 import java.util.Objects;
 
 public class Piece {
-    private final String color;
-    private final String shape;
+    private final String part;
+    private final Integer version;
 
-    public Piece(String color, String shape) {
-        this.color = color;
-        this.shape = shape;
+    public Piece(String part, Integer version) {
+        this.part = part;
+        this.version = version;
     }
 
-    public String getColor() {
-        return color;
+    public String getPart() {
+        return part;
     }
 
-    public String getShape() {
-        return shape;
+    public Integer getVersion() {
+        return version;
     }
 
     @Override
@@ -24,12 +24,12 @@ public class Piece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Piece piece = (Piece) o;
-        return Objects.equals(color, piece.color) &&
-                Objects.equals(shape, piece.shape);
+        return Objects.equals(part, piece.part) &&
+                Objects.equals(version, piece.version);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(color, shape);
+        return Objects.hash(part, version);
     }
 }
