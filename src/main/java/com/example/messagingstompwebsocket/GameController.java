@@ -61,7 +61,7 @@ public class GameController {
                 }).orElse(new HashSet<>());
 
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setLocation("EARTH");
+        chatMessage.setLocation("GAME");
         chatMessage.setGame(gameId);
         if (right.size() == 5) {
             chatMessage.setMessage("You Win!");
@@ -120,7 +120,7 @@ public class GameController {
 
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setGame(body.getGame());
-        chatMessage.setLocation(body.getLocation());
+        chatMessage.setLocation("GAME");
         chatMessage.setMessage(body.getUsername() + " joined");
         simpMessagingTemplate.convertAndSend("/games/list/"+body.getGame(), chatMessage);
 
