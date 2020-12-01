@@ -9,8 +9,10 @@ public class Game {
     private final LocalDateTime creationTime;
     private final Set<Piece> moonPieces;
     private final Set<Piece> earthPieces;
+    private LocalDateTime startTime;
     private String userOnEarth;
     private String userOnMoon;
+    private String result;
 
     public Game(String gameId) {
         this.id = gameId;
@@ -36,6 +38,14 @@ public class Game {
         return earthPieces;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public String getUserOnEarth() {
         return userOnEarth;
     }
@@ -52,6 +62,14 @@ public class Game {
         this.userOnMoon = userOnMoon;
     }
 
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,13 +79,15 @@ public class Game {
                 Objects.equals(creationTime, game.creationTime) &&
                 Objects.equals(moonPieces, game.moonPieces) &&
                 Objects.equals(earthPieces, game.earthPieces) &&
+                Objects.equals(startTime, game.startTime) &&
                 Objects.equals(userOnEarth, game.userOnEarth) &&
-                Objects.equals(userOnMoon, game.userOnMoon);
+                Objects.equals(userOnMoon, game.userOnMoon) &&
+                Objects.equals(result, game.result);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationTime, moonPieces, earthPieces, userOnEarth, userOnMoon);
+        return Objects.hash(id, creationTime, moonPieces, earthPieces, startTime, userOnEarth, userOnMoon, result);
     }
 
     @Override
@@ -77,8 +97,10 @@ public class Game {
                 ", creationTime=" + creationTime +
                 ", moonPieces=" + moonPieces +
                 ", earthPieces=" + earthPieces +
+                ", startTime=" + startTime +
                 ", userOnEarth='" + userOnEarth + '\'' +
                 ", userOnMoon='" + userOnMoon + '\'' +
+                ", result='" + result + '\'' +
                 '}';
     }
 }

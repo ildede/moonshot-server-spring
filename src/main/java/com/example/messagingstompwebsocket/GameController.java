@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -107,9 +108,11 @@ public class GameController {
                     if (body.getLocation().equals("EARTH") && game.getUserOnEarth() == null) {
                         logger.info("Aggiungo username alla terra");
                         game.setUserOnEarth(body.getUsername());
+                        game.setStartTime(LocalDateTime.now().plusSeconds(5));
                     } else if (body.getLocation().equals("MOON") && game.getUserOnMoon() == null) {
                         logger.info("Aggiungo username alla luna");
                         game.setUserOnMoon(body.getUsername());
+                        game.setStartTime(LocalDateTime.now().plusSeconds(5));
                     }
                     gameRepository.write(game);
                 });

@@ -6,6 +6,15 @@ public class ChatMessage {
     private String location;
     private String message;
 
+    public ChatMessage() {
+    }
+
+    public ChatMessage(String game, String location, String message) {
+        this.game = game;
+        this.location = location;
+        this.message = message;
+    }
+
     public String getGame() {
         return game;
     }
