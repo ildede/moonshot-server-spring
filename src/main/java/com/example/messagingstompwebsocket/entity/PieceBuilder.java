@@ -9,7 +9,7 @@ public class PieceBuilder {
 
     public PieceBuilder() {
         Random rand = new Random();
-        int numberOfElements = 3;
+        int numberOfElements = 5;
         List<String> parts = Arrays.asList("top", "scuttle", "door", "body", "bottom");
 
         Set<Piece> forMoon = new HashSet<>();
