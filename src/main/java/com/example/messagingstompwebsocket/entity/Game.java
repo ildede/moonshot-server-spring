@@ -95,8 +95,6 @@ public class Game {
         return "Game{" +
                 "id='" + id + '\'' +
                 ", creationTime=" + creationTime +
-                ", moonPieces=" + moonPieces +
-                ", earthPieces=" + earthPieces +
                 ", startTime=" + startTime +
                 ", userOnEarth='" + userOnEarth + '\'' +
                 ", userOnMoon='" + userOnMoon + '\'' +

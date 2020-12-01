@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class GameController {
         Set<Piece> right = gameRepository.read(gameId)
                 .map(g -> {
                     if (g.getMoonPieces().containsAll(selected)
-                        && selected.containsAll(g.getMoonPieces())) {
+                            && selected.containsAll(g.getMoonPieces())) {
                         return g.getMoonPieces();
                     } else {
                         return g.getMoonPieces().stream()
@@ -134,8 +135,69 @@ public class GameController {
     public ResponseEntity<String> postMessage(@RequestBody ChatMessage body) {
         logger.info("/games/message, body: {}", body);
 
-        simpMessagingTemplate.convertAndSend("/games/list/"+body.getGame(), body);
+        gameRepository.read(body.getGame())
+                .ifPresent(game -> {
+                    ChatMessage message = null;
+                    if (game.getStartTime() != null) {
+                        LocalDateTime now = LocalDateTime.now();
+                        if (now.isAfter(game.getStartTime())) {
+                            Duration duration = Duration.between(now, game.getStartTime());
+                            long diff = Math.abs(duration.toSeconds());
+                            if (diff < 25L) {
+                                message = body;
+                            } else if (diff < 50L) {
+                                message = maxLength(body);
+                            } else if (diff < 75L) {
+                                if (body.getLocation().equals("MOON")) {
+                                    message = vowelNotWorking(maxLength(body));
+                                } else {
+                                    message = maxLength(body);
+                                }
+                            } else if (diff < 102L) {
+                                if (body.getLocation().equals("MOON")) {
+                                    message = partialTransmission(vowelNotWorking(maxLength(body)));
+                                } else {
+                                    message = partialTransmission(maxLength(body));
+                                }
+                            }
+                        }
+                    }
+                    simpMessagingTemplate.convertAndSend("/games/list/"+game.getId(), message != null ? message : body);
+                });
 
         return ResponseEntity.ok("OK");
     }
+
+    private ChatMessage partialTransmission(ChatMessage body) {
+        char[] chars = body.getMessage().toCharArray();
+        StringBuilder newMessage = new StringBuilder();
+        for (int i = 0; i < chars.length-1; i++) {
+            if (i%5 != 0) {
+                newMessage.append(chars[i]);
+            }
+        }
+        return new ChatMessage(
+                body.getGame(),
+                body.getLocation(),
+                newMessage.toString()
+        );
+    }
+
+    private ChatMessage maxLength(ChatMessage body) {
+        return new ChatMessage(
+                body.getGame(),
+                body.getLocation(),
+                body.getMessage().length() > 20 ? body.getMessage().substring(0, 20) : body.getMessage()
+        );
+    }
+
+    private ChatMessage vowelNotWorking(ChatMessage body) {
+        return new ChatMessage(
+                body.getGame(),
+                body.getLocation(),
+                body.getMessage().replaceAll("[aeiou]", "*")
+        );
+    }
+
+//        simpMessagingTemplate.convertAndSend("/games/list/"+game.getId(), new ChatMessage(game.getId(), "GAME", "Signal interference, partial transmission."));
 }

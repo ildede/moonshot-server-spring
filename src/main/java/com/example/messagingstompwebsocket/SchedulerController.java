@@ -49,7 +49,7 @@ public class SchedulerController {
         gameRepository.readAll()
                 .forEach(game -> {
                     if (game.getStartTime() != null) {
-                        if (game.getResult() != null) {
+                        if (game.getResult() == null) {
                             LocalDateTime now = LocalDateTime.now();
                             if (now.isBefore(game.getStartTime())) {
                                 Duration duration = Duration.between(now, game.getStartTime());
@@ -61,6 +61,13 @@ public class SchedulerController {
                             } else {
                                 Duration duration = Duration.between(now, game.getStartTime());
                                 long diff = Math.abs(duration.toSeconds());
+                                if (diff == 24L) {
+                                    simpMessagingTemplate.convertAndSend("/games/list/"+game.getId(), new ChatMessage(game.getId(), "GAME", "Low bandwidth, messages are now limited to 15 chars."));
+                                } else if (diff == 49L) {
+                                    simpMessagingTemplate.convertAndSend("/games/list/"+game.getId(), new ChatMessage(game.getId(), "GAME", "Keyboard malfunction on moon, some keys are not working."));
+                                } else if (diff == 74L) {
+                                    simpMessagingTemplate.convertAndSend("/games/list/"+game.getId(), new ChatMessage(game.getId(), "GAME", "Signal interference, partial transmission."));
+                                }
                                 simpMessagingTemplate.convertAndSend(
                                         "/games/list/"+game.getId(),
                                         new ChatMessage(game.getId(), "seconds-from-start", String.valueOf(diff))
