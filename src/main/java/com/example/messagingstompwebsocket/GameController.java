@@ -49,6 +49,7 @@ public class GameController {
 
     @PostMapping(value = "/games/{gameId}/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getGame(@PathVariable String gameId, @RequestBody Set<Piece> selected) {
+        logger.info("/games/{}/check, body: {}", gameId, selected);
 
         Set<Piece> right = gameRepository.read(gameId)
                 .map(g -> {
@@ -63,12 +64,12 @@ public class GameController {
                 }).orElse(new HashSet<>());
 
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setLocation("GAME");
+        chatMessage.setLocation("game-end");
         chatMessage.setGame(gameId);
         if (right.size() == 5) {
-            chatMessage.setMessage("You Win!");
+            chatMessage.setMessage("WON");
         } else {
-            chatMessage.setMessage(right.size() + " right. Try Again.");
+            chatMessage.setMessage("LOST");
         }
 
         simpMessagingTemplate.convertAndSend("/games/list/"+gameId, chatMessage);
@@ -171,9 +172,9 @@ public class GameController {
     private ChatMessage partialTransmission(ChatMessage body) {
         char[] chars = body.getMessage().toCharArray();
         StringBuilder newMessage = new StringBuilder();
-        for (int i = 0; i < chars.length-1; i++) {
+        for (int i = 1; i < chars.length; i++) {
             if (i%5 != 0) {
-                newMessage.append(chars[i]);
+                newMessage.append(chars[i-1]);
             }
         }
         return new ChatMessage(
@@ -195,7 +196,7 @@ public class GameController {
         return new ChatMessage(
                 body.getGame(),
                 body.getLocation(),
-                body.getMessage().replaceAll("[aeiou]", "*")
+                body.getMessage().replaceAll("[ae]", "*")
         );
     }
 
