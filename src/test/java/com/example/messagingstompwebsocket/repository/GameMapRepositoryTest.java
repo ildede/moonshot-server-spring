@@ -58,14 +58,18 @@ class GameMapRepositoryTest {
 
     @Test
     void RETRIEVE_ALL_ELEMENTS() {
-        GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", new Game("any1"), "any2", new Game("any2"))));
-        assertEquals(Set.of(new Game("any1"), new Game("any2")), repository.readAll());
+        Game game1 = new Game("any1");
+        Game game2 = new Game("any2");
+        GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", game1, "any2", game2)));
+        assertEquals(Set.of(game1, game2), repository.readAll());
     }
 
     @Test
     void RETRIEVE_SINGLE_ELEMENT() {
-        GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", new Game("any1"), "any2", new Game("any2"))));
-        assertEquals(Optional.of(new Game("any1")), repository.read("any1"));
+        Game game1 = new Game("any1");
+        Game game2 = new Game("any2");
+        GameMapRepository repository = new GameMapRepository(new HashMap<>(Map.of("any1", game1, "any2", game2)));
+        assertEquals(Optional.of(game1), repository.read("any1"));
     }
 
     @Test

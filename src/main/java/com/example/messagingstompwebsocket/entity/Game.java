@@ -76,7 +76,6 @@ public class Game {
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
         return Objects.equals(id, game.id) &&
-                Objects.equals(creationTime, game.creationTime) &&
                 Objects.equals(moonPieces, game.moonPieces) &&
                 Objects.equals(earthPieces, game.earthPieces) &&
                 Objects.equals(startTime, game.startTime) &&
@@ -87,7 +86,7 @@ public class Game {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationTime, moonPieces, earthPieces, startTime, userOnEarth, userOnMoon, result);
+        return Objects.hash(id, moonPieces, earthPieces, startTime, userOnEarth, userOnMoon, result);
     }
 
     @Override
