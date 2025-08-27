@@ -61,7 +61,12 @@ class SchedulerControllerTest {
 
     @Test
     void IT_SENDS_TIME_PASSED_TO_EACH_GAME() {
-        when(gameRepository.readAll()).thenReturn(Set.of(new Game("any1"), new Game("any2")));
+        Game game1 = new Game("any1");
+        Game game2 = new Game("any2");
+        game1.setStartTime(LocalDateTime.now().minusSeconds(10));
+        game2.setStartTime(LocalDateTime.now().minusSeconds(20));
+
+        when(gameRepository.readAll()).thenReturn(Set.of(game1, game2));
 
         controller.sendCurrentPlayTimeToEachGame();
 
